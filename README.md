@@ -1,75 +1,257 @@
-# React + TypeScript + Vite
+# GNIVC Todo — учебное задание
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Репозиторий содержит стартовый каркас приложения. Ваша задача — реализовать полноценный Todo-лист, следуя архитектуре [Feature-Sliced Design (FSD)](https://feature-sliced.design/ru/).
 
-Currently, two official plugins are available:
+## Цель
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Получить практический опыт:
 
-## React Compiler
+- декомпозиции UI и логики по слоям FSD;
+- работы с формами через **react-hook-form**;
+- организации состояния и публичного API слайсов;
+- реализации мокового бэкенда с персистентным хранением;
+- написания читаемого TypeScript-кода.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Быстрый старт
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Проверка перед сдачей:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+npm run lint
+npm run build
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Что уже есть в проекте
+
+Каркас подготовлен за вас — **не переписывайте структуру с нуля**, развивайте существующие слои:
 
 ```
+src/
+├── app/                 # точка входа, глобальные стили
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── styles/
+├── pages/
+│   └── HomePage/        # страница-композиция
+├── widgets/             # крупные блоки UI (пока пусто)
+├── features/            # пользовательские сценарии (пока пусто)
+├── entities/
+│   └── todo/            # сущность «задача» (есть только тип)
+│       ├── model/
+│       └── api/
+└── shared/
+    ├── api/             # HTTP-клиент
+    ├── hooks/           # общие хуки
+    ├── ui/              # UI-kit
+    └── assets/
+```
+
+Тип задачи уже объявлен в `entities/todo/model/types.ts`:
+
+```ts
+interface Todo {
+  id: string
+  title: string
+  completed: boolean
+  createdAt: Date
+}
+```
+
+Алиас импортов: `@/` → `src/` (настроен в Vite и TypeScript).
+
+## Функциональные требования
+
+Реализуйте на главной странице:
+
+1. **Добавление задачи** — форма с полем «Название».
+2. **Список задач** — отображение всех добавленных задач.
+3. **Отметка выполнения** — переключение статуса `completed`.
+4. **Удаление задачи**.
+5. **Пустое состояние** — если задач нет, показывать понятное сообщение (заготовка уже есть в `HomePage`).
+6. **Сохранение между сессиями** — после перезагрузки страницы список задач восстанавливается (см. раздел «Моковый бэкенд»).
+
+### Валидация формы (react-hook-form)
+
+Форма добавления задачи **обязательно** реализуется через [react-hook-form](https://react-hook-form.com/):
+
+- поле `title` — обязательное;
+- минимальная длина — 1 символ (после `trim`);
+- максимальная длина — 100 символов;
+- ошибки валидации отображаются пользователю рядом с полем;
+- отправка формы не должна перезагружать страницу.
+
+Пример ожидаемого поведения: пустая строка или строка из пробелов — ошибка «Введите название задачи».
+
+## Требования по FSD
+
+### Слои и ответственность
+
+| Слой | Что размещать |
+|------|---------------|
+| `app` | инициализация, провайдеры (если нужны), глобальные стили |
+| `pages` | композиция страницы из виджетов и фич, без бизнес-логики |
+| `widgets` | крупные самостоятельные блоки (например, список задач целиком) |
+| `features` | действия пользователя (добавить, удалить, переключить статус) |
+| `entities` | модель `Todo`, хранилище/состояние сущности, API-методы |
+| `shared` | переиспользуемые UI-компоненты, axios-инстанс, утилиты, хуки |
+
+### Правила импортов
+
+Соблюдайте направление зависимостей FSD — **импорт только «вниз»**:
+
+```
+app → pages → widgets → features → entities → shared
+```
+
+- слайс **не импортирует** другой слайс того же слоя напрямую;
+- `shared` **не импортирует** ничего из `entities`, `features`, `widgets`, `pages`, `app`;
+- каждый слайс экспортирует публичный API через `index.ts` — импортируйте из `@/entities/todo`, а не из внутренних файлов слайса.
+
+### Рекомендуемая декомпозиция
+
+Минимальный набор слайсов (можно расширять, но не упрощать до «всё в HomePage»):
+
+```
+features/
+  add-todo/          # форма добавления (react-hook-form)
+  toggle-todo/       # чекбокс / кнопка выполнения
+  delete-todo/       # удаление
+
+widgets/
+  todo-list/         # список с композицией фич
+
+entities/todo/
+  model/             # store, типы, селекторы
+  api/               # моковый бэкенд (CRUD-методы поверх localStorage / IndexedDB)
+  ui/                # TodoItem — отображение одной задачи (опционально)
+
+shared/ui/
+  Button, Input, ... # базовые компоненты для фич
+```
+
+### Public API
+
+Каждый слайс должен иметь `index.ts` с явным реэкспортом. Пример:
+
+```ts
+// features/add-todo/index.ts
+export { AddTodoForm } from './ui/AddTodoForm'
+```
+
+## Технические требования
+
+- **React 19 + TypeScript** — без `any`, типизируйте пропсы и данные формы.
+- **react-hook-form** — для формы добавления задачи (см. выше).
+- **MobX** (`mobx`, `mobx-react`) — для состояния списка задач в `entities/todo/model`. Store загружает и сохраняет данные через моковый API, а не держит их только в памяти.
+- **Стили** — CSS-модули или обычный CSS в папке слайса; глобальные стили только в `app/styles`.
+- **Именование** — папки слайсов в `kebab-case`, компоненты в `PascalCase`.
+
+### Моковый бэкенд
+
+Данные **не должны жить только в памяти**. Нужно реализовать моковый бэкенд — слой, который имитирует серверное API, но хранит данные локально в браузере.
+
+**Выберите один вариант хранения:**
+
+| Вариант | Когда выбирать |
+|---------|----------------|
+| **localStorage** | проще в реализации, достаточно для учебного задания |
+| **IndexedDB** | если хотите потренироваться с асинхронным API и большим объёмом данных |
+
+Оба варианта допустимы. Выбор зафиксируйте в описании к сдаче.
+
+#### Где размещать в FSD
+
+```
+entities/todo/api/
+  todoApi.ts         # публичные методы: getAll, create, update, delete
+  storage.ts         # низкоуровневая работа с localStorage / IndexedDB
+  index.ts
+```
+
+- UI-слои (`features`, `widgets`, `pages`) **не обращаются** к `localStorage` / `IndexedDB` напрямую — только через `entities/todo/api`;
+- MobX store в `entities/todo/model` вызывает методы API и синхронизирует состояние;
+- интерфейс методов API должен быть **асинхронным** (`async` / `Promise`), даже если используете localStorage — это подготовит код к замене мока на реальный бэкенд.
+
+#### Минимальный контракт API
+
+```ts
+// entities/todo/api/todoApi.ts
+export const todoApi = {
+  getAll(): Promise<Todo[]>
+  create(data: Pick<Todo, 'title'>): Promise<Todo>
+  update(id: string, data: Partial<Pick<Todo, 'title' | 'completed'>>): Promise<Todo>
+  delete(id: string): Promise<void>
+}
+```
+
+#### Требования к персистентности
+
+- при загрузке приложения задачи **читаются из хранилища** и попадают в store;
+- каждое создание, изменение и удаление **сразу сохраняется** в хранилище;
+- `createdAt` сериализуется и корректно восстанавливается после перезагрузки (помните: `Date` в JSON становится строкой);
+- ключ хранилища — константа в одном месте (например, `gnivc-todo-items`), не размазывайте строки по проекту.
+
+#### Проверка
+
+1. Добавьте несколько задач.
+2. Перезагрузите страницу (`F5`).
+3. Список должен полностью восстановиться, включая статус `completed`.
+
+## Критерии приёмки
+
+Задание считается выполненным, если:
+
+- [ ] `npm run build` и `npm run lint` проходят без ошибок;
+- [ ] реализованы все 6 функциональных требований;
+- [ ] моковый бэкенд в `entities/todo/api` работает через localStorage **или** IndexedDB;
+- [ ] данные сохраняются после перезагрузки страницы;
+- [ ] форма добавления использует `react-hook-form` с валидацией;
+- [ ] код разложен по слоям FSD, `HomePage` не содержит всю логику;
+- [ ] импорты не нарушают правила слоёв;
+- [ ] у слайсов есть `index.ts` (public API);
+- [ ] нет «мёртвого» кода и закомментированных заготовок без необходимости.
+
+## Что сдавать
+
+1. Ссылку на репозиторий / MR с реализацией.
+2. Краткое описание (5–10 предложений): какие слайсы создали, почему именно так разделили ответственность, и какой вариант хранения выбрали (localStorage / IndexedDB).
+
+## Полезные ссылки
+
+- [Feature-Sliced Design — документация](https://feature-sliced.design/ru/)
+- [react-hook-form — Get Started](https://react-hook-form.com/get-started)
+- [MobX — React integration](https://mobx.js.org/react-integration.html)
+
+## Подсказки
+
+<details>
+<summary>С чего начать</summary>
+
+1. Реализуйте моковый бэкенд в `entities/todo/api` (localStorage или IndexedDB).
+2. Реализуйте MobX store в `entities/todo/model`, подключите к API.
+3. Создайте `shared/ui/Input` и `shared/ui/Button`.
+4. Сделайте `features/add-todo` с формой на react-hook-form.
+5. Соберите `widgets/todo-list` и подключите фичи `toggle-todo`, `delete-todo`.
+6. Оставьте в `pages/HomePage` только композицию виджетов.
+7. Проверьте сохранение данных после перезагрузки страницы.
+
+</details>
+
+<details>
+<summary>Типичные ошибки</summary>
+
+- Вся логика в `HomePage.tsx` — нарушение FSD.
+- Импорт `features/add-todo` из `features/delete-todo` — слайсы одного слоя независимы.
+- Прямой импорт `@/entities/todo/model/store` вместо `@/entities/todo` — обход public API.
+- Форма на `useState` вместо react-hook-form — не соответствует заданию.
+- Прямые вызовы `localStorage.setItem` из компонентов фич — нарушение FSD, хранилище только в `entities/todo/api`.
+- Данные только в MobX без записи в localStorage / IndexedDB — задачи пропадут после `F5`.
+
+</details>
+
+Удачи!
