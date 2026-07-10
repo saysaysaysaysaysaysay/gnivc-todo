@@ -10,11 +10,91 @@
 - работы с формами через **react-hook-form**;
 - организации состояния и публичного API слайсов;
 - реализации мокового бэкенда с персистентным хранением;
+- работы с Git: feature-ветки, Conventional Commits, SemVer;
 - написания читаемого TypeScript-кода.
+
+## Git-воркфлоу
+
+**Перед началом разработки** каждый стажёр создаёт свою feature-ветку от актуальной `main` и ведёт всю работу только в ней.
+
+### Feature-ветка
+
+Имя ветки — **латиницей, в kebab-case, с вашей фамилией**:
+
+```
+feature/ivanov
+feature/petrov
+```
+
+```bash
+git checkout main
+git pull origin main
+git checkout -b feature/ivanov   # подставьте свою фамилию
+```
+
+Правила:
+
+- не коммитьте напрямую в `main`;
+- не работайте в чужой ветке;
+- перед сдачей убедитесь, что ветка актуальна относительно `main` (`git pull origin main` + rebase или merge);
+- сдача — через Merge Request / Pull Request из своей feature-ветки.
+
+### Conventional Commits
+
+Сообщения коммитов — по [Conventional Commits](https://www.conventionalcommits.org/ru/):
+
+```
+<type>(<scope>): <краткое описание>
+```
+
+| type | Когда использовать |
+|------|-------------------|
+| `feat` | новая функциональность |
+| `fix` | исправление бага |
+| `refactor` | рефакторинг без изменения поведения |
+| `style` | форматирование, стили, без логики |
+| `docs` | только документация |
+| `chore` | конфиг, зависимости, прочее |
+
+Примеры для этого проекта:
+
+```
+feat(entities/todo): add todoApi with localStorage backend
+feat(features/add-todo): implement add todo form with react-hook-form
+fix(entities/todo): restore createdAt after reload
+refactor(widgets/todo-list): extract TodoListItem
+```
+
+- описание — в **настоящем времени**, строчными буквами, без точки в конце;
+- один коммит — одно логическое изменение;
+- не используйте расплывчатые сообщения вроде `fix`, `wip`, `update`.
+
+### SemVer
+
+Версию проекта ведите по [Semantic Versioning](https://semver.org/lang/ru/): `MAJOR.MINOR.PATCH`.
+
+Текущая версия указана в `package.json` (сейчас `1.0.0`). Обновляйте её по мере разработки:
+
+| Изменение | Версия | Пример |
+|-----------|--------|--------|
+| ломающее изменение публичного API / контракта | `MAJOR` | `1.0.0` → `2.0.0` |
+| новая функциональность, обратно совместимая | `MINOR` | `1.0.0` → `1.1.0` |
+| исправление бага, обратно совместимое | `PATCH` | `1.0.0` → `1.0.1` |
+
+Для учебного задания достаточно поднимать `MINOR` при добавлении фич (`1.1.0`, `1.2.0`…) и `PATCH` при багфиксах.  
+Изменение версии — отдельный коммит:
+
+```
+chore(release): bump version to 1.1.0
+```
 
 ## Быстрый старт
 
 ```bash
+git checkout main
+git pull origin main
+git checkout -b feature/ваша-фамилия
+
 npm install
 npm run dev
 ```
@@ -214,16 +294,21 @@ export const todoApi = {
 - [ ] код разложен по слоям FSD, `HomePage` не содержит всю логику;
 - [ ] импорты не нарушают правила слоёв;
 - [ ] у слайсов есть `index.ts` (public API);
+- [ ] вся разработка ведётся в feature-ветке `feature/<фамилия>`;
+- [ ] коммиты оформлены по Conventional Commits;
+- [ ] версия в `package.json` обновлена по SemVer и отражает внесённые изменения;
 - [ ] нет «мёртвого» кода и закомментированных заготовок без необходимости.
 
 ## Что сдавать
 
-1. Ссылку на репозиторий / MR с реализацией.
+1. Merge Request из ветки `feature/<ваша-фамилия>` в `main`.
 2. Краткое описание (5–10 предложений): какие слайсы создали, почему именно так разделили ответственность, и какой вариант хранения выбрали (localStorage / IndexedDB).
 
 ## Полезные ссылки
 
 - [Feature-Sliced Design — документация](https://feature-sliced.design/ru/)
+- [Conventional Commits](https://www.conventionalcommits.org/ru/)
+- [Semantic Versioning](https://semver.org/lang/ru/)
 - [react-hook-form — Get Started](https://react-hook-form.com/get-started)
 - [MobX — React integration](https://mobx.js.org/react-integration.html)
 
@@ -232,13 +317,14 @@ export const todoApi = {
 <details>
 <summary>С чего начать</summary>
 
-1. Реализуйте моковый бэкенд в `entities/todo/api` (localStorage или IndexedDB).
-2. Реализуйте MobX store в `entities/todo/model`, подключите к API.
-3. Создайте `shared/ui/Input` и `shared/ui/Button`.
-4. Сделайте `features/add-todo` с формой на react-hook-form.
-5. Соберите `widgets/todo-list` и подключите фичи `toggle-todo`, `delete-todo`.
-6. Оставьте в `pages/HomePage` только композицию виджетов.
-7. Проверьте сохранение данных после перезагрузки страницы.
+1. Создайте ветку `feature/<ваша-фамилия>` от актуальной `main`.
+2. Реализуйте моковый бэкенд в `entities/todo/api` (localStorage или IndexedDB).
+3. Реализуйте MobX store в `entities/todo/model`, подключите к API.
+4. Создайте `shared/ui/Input` и `shared/ui/Button`.
+5. Сделайте `features/add-todo` с формой на react-hook-form.
+6. Соберите `widgets/todo-list` и подключите фичи `toggle-todo`, `delete-todo`.
+7. Оставьте в `pages/HomePage` только композицию виджетов.
+8. Проверьте сохранение данных после перезагрузки страницы.
 
 </details>
 
@@ -251,6 +337,8 @@ export const todoApi = {
 - Форма на `useState` вместо react-hook-form — не соответствует заданию.
 - Прямые вызовы `localStorage.setItem` из компонентов фич — нарушение FSD, хранилище только в `entities/todo/api`.
 - Данные только в MobX без записи в localStorage / IndexedDB — задачи пропадут после `F5`.
+- Коммиты в `main` или ветка без фамилии (`feature/todo`, `dev`) — не соответствует воркфлоу.
+- Сообщения коммитов `update`, `fix bug`, `wip` — не Conventional Commits.
 
 </details>
 
