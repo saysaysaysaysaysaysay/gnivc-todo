@@ -8,6 +8,11 @@ import { observer } from 'mobx-react';
 export const DeleteTodo = observer(function DeleteTodo({ todoId }: IDeleteTodoProps) {
   
   const handleDelete = async () => {
+    const confirmed = window.confirm('Вы уверены, что хотите удалить эту задачу?');
+    
+    if (!confirmed) {
+      return;
+    }
     await todoStore.deleteTodo(todoId);
   };
 
