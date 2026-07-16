@@ -15,7 +15,7 @@
 }
 
 .required {
-  color: var(--red-bg);
+  color: var(--red);
   font-weight: 600;
 }
 
@@ -46,18 +46,23 @@
     box-shadow: 0 0 0 3px var(--accent-bg);
   }
 
-  &.error {
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: var(--code-bg);
+  }
+
+  &[aria-invalid="true"] {
     border-color: var(--red-border);
     
     &:focus {
       box-shadow: 0 0 0 3px rgba(250, 34, 34, 0.15);
     }
   }
-
 }
 
 .errorMessage {
   font-size: 12px;
-  color: var(--red-bg);
+  color: var(--red);
   margin-top: 2px;
 }
