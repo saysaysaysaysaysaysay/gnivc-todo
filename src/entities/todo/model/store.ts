@@ -8,14 +8,13 @@ export class TodoStore {
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
+    this.loadTodos();
   }
 
   async loadTodos(): Promise<void> {
     this.isLoading = true;
-
     try {
       const todos = await todoApi.getAll();
-
       runInAction(() => {
         this.todos = todos;
       });
