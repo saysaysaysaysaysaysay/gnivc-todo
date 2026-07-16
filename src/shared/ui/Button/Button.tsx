@@ -1,27 +1,30 @@
-import { type FC, memo } from "react";
+import clsx from 'clsx';
 import styles from './Button.module.scss';
-import type { IButtonProps } from "./types";
+import type { IButtonProps } from './types';
 
-const ButtonImpl: FC<IButtonProps> = ({
+export function Button({
   children,
+  icon,
   onClick,
-  className = "",
-  variant = "default",
-  htmlType = "button"
-}) => {
+  disabled = false,
+  className = '',
+  variant = 'default',
+  htmlType = 'button'
+}: IButtonProps) {
+  
   return (
     <button
-      className={`
-        ${styles.button} 
-        ${styles[variant]} 
-        ${className}
-      `}
+      className={clsx(
+        styles.button,
+        styles[variant],
+        className
+      )}
       onClick={onClick}
       type={htmlType}
+      disabled={disabled}
     >
-      {children}
+      {icon ? <span className={styles.icon}>{icon}</span> : null}
+      {children ? <span className={styles.content}>{children}</span> : null}
     </button>
   );
-};
-
-export const Button = memo(ButtonImpl);
+}

@@ -1,20 +1,20 @@
-import type { Todo } from '@/entities/todo'
+import { todoStore } from '@/entities/todo'
 import './HomePage.css'
-const todos: Todo[] = []
+import { AddTodoForm } from '@/features'
+import { TodoList } from '@/widgets'
+import { observer } from 'mobx-react'
+import { useEffect } from 'react'
 
-export function HomePage() {
+
+export const HomePage = observer( function HomePage() {
+  useEffect(() => {
+    void todoStore.loadTodos()
+  }, [])
   return (
-    <main className="home-page">
+    <main className='home-page'>
       <h1>Todo</h1>
-      {todos.length === 0 ? (
-        <p className="home-page__empty">Пока нет задач</p>  
-      ) : (
-        <ul className="home-page__list">
-          {todos.map((todo) => (
-            <li key={todo.id}>{todo.title}</li>
-          ))}
-        </ul>
-      )}
+      <AddTodoForm></AddTodoForm>
+      <TodoList todos={todoStore.todos}></TodoList>
     </main>
   )
-}
+})

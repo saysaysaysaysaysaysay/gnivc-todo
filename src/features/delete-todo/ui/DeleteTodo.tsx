@@ -2,11 +2,13 @@ import { Button } from '@/shared/ui';
 import styles from './DeleteTodo.module.scss';
 import type { IDeleteTodoProps } from './types';
 import { FaTrash } from 'react-icons/fa6';
+import { todoStore } from '@/entities/todo';
+import { observer } from 'mobx-react';
 
-export const DeleteTodo = function DeleteTodo({ todoId }: IDeleteTodoProps) {
+export const DeleteTodo = observer(function DeleteTodo({ todoId }: IDeleteTodoProps) {
   
   const handleDelete = async () => {
-   console.log(`удаляем задачу с id: ${todoId}`)
+    await todoStore.deleteTodo(todoId);
   };
 
   return (
@@ -18,4 +20,4 @@ export const DeleteTodo = function DeleteTodo({ todoId }: IDeleteTodoProps) {
       onClick={() => void handleDelete()}
     />
   );
-};
+});

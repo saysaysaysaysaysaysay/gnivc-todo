@@ -4,8 +4,9 @@ import { DeleteTodo } from '@/features/delete-todo';
 import clsx from 'clsx';
 import styles from './TodoItem.module.scss';
 import { formatTodoDate } from '@/shared/utility';
+import { observer } from 'mobx-react';
 
-export function TodoItem({ todo, className }: ITodoItemProps) {
+export const TodoItem = observer(function TodoItem({ todo, className }: ITodoItemProps) {
   
   const { id, title, completed, createdAt } = todo;
 
@@ -36,4 +37,4 @@ export function TodoItem({ todo, className }: ITodoItemProps) {
       </div>
     </div>
   );
-}
+})

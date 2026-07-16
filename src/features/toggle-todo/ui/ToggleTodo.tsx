@@ -1,10 +1,12 @@
 import { Button } from '@/shared/ui';
 import styles from './ToggleTodo.module.scss';
 import type { IToggleTodoButtonProps } from './types';
+import { todoStore } from '@/entities/todo';
+import { observer } from 'mobx-react';
 
-export function ToggleTodo({ todoId, completed }: IToggleTodoButtonProps) {
+export const ToggleTodo = observer(function ToggleTodo({ todoId, completed }: IToggleTodoButtonProps) {
   const handleToggle = async () => {
-    console.log(`меняем статус задачи с id: ${todoId}`)
+    await todoStore.toggleTodo(todoId);
   };
 
   return (
@@ -17,4 +19,4 @@ export function ToggleTodo({ todoId, completed }: IToggleTodoButtonProps) {
       {completed ? 'В работе' : 'Выполнено'}
     </Button>
   );
-};
+});

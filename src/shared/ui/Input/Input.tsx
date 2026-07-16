@@ -1,8 +1,9 @@
-import { memo, useId} from 'react';
+import { useId} from 'react';
+import clsx from 'clsx';
 import type { IInputProps } from './types';
 import styles from './Input.module.scss';
 
-function InputImpl({
+export function Input({
   label,
   error, 
   id,
@@ -11,8 +12,9 @@ function InputImpl({
 }: IInputProps) {
   const generatedId = useId()
   const inputId = id ?? generatedId
+  
   return (
-    <div className={`${styles.inputWrapper} ${className}`}>
+    <div className={clsx(styles['input-wrapper'], className)}>
 
       {label && (
         <label htmlFor={inputId} className={styles.label}>
@@ -22,15 +24,13 @@ function InputImpl({
       
       <input
         id={inputId}
-        className={`${styles.input}`}
+        className={styles.input}
         aria-invalid={Boolean(error)}
         {...props}
       />
       
-      {error && <span className={styles.errorMessage}>{error}</span>}
+      {error && <span className={styles['error-message']}>{error}</span>}
 
     </div>
   );
 }
-
-export const Input = memo(InputImpl);

@@ -2,8 +2,10 @@ import { useForm } from 'react-hook-form';
 import { Button, Input } from '@/shared/ui';
 import styles from './AddTodoForm.module.scss';
 import type { IAddTodoFormValues } from './types';
+import { todoStore } from '@/entities/todo';
+import { observer } from 'mobx-react';
 
-export function AddTodoForm() {
+export const AddTodoForm = observer(function AddTodoForm() {
   const {
     register,
     handleSubmit,
@@ -17,7 +19,7 @@ export function AddTodoForm() {
   });
 
   const onSubmit = async ({ title }: IAddTodoFormValues) => {
-    console.log(`создаем задачу с title: ${title}`)
+    await todoStore.addTodo(title);
     reset({ title: '' });
   };
 
@@ -44,4 +46,4 @@ export function AddTodoForm() {
       </Button>
     </form>
   );
-}
+});
