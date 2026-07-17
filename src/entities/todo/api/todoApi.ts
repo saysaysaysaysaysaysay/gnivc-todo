@@ -1,12 +1,17 @@
 import type { Todo } from "../model/types";
 import { readTodosFromStorage, writeTodosToStorage } from "./storage";
 import type { ITodoApi } from "./types";
+import { v4 as uuidv4 } from "uuid";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 function createTodoId(): string {
-  return `${Date.now()}-${Math.random().toString(36).substring(2, 10)}`;
+  return uuidv4();
 }
 function createUTCDate(): Date {
-  return new Date(new Date().toISOString());
+  return dayjs().utc().toDate();
 }
 
 export const todoApi: ITodoApi = {
@@ -55,4 +60,3 @@ export const todoApi: ITodoApi = {
     await writeTodosToStorage(todos.filter((todo) => todo.id !== id));
   },
 };
-
