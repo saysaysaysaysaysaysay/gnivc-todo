@@ -1,6 +1,6 @@
 import styles from './TodoList.module.scss';
 import type { ITodoListProps } from './types';
-import { TodoItem } from '@/features';
+import { TodoItem } from '@/features/todo-item';
 
 export function TodoList({ todos }: ITodoListProps) {
   
