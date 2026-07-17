@@ -1,9 +1,9 @@
-export interface IRenameTodoFormProps {
+export interface IEditTodoFormProps {
   todoId: string;
   currentTitle: string;
   onClose?: () => void;
 }
 
-export interface IRenameTodoFormValues {
+export interface IEditTodoFormValues {
   title: string;
 }

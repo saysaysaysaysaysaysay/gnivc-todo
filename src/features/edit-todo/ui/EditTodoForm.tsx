@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import type { IRenameTodoFormProps, IRenameTodoFormValues } from "./types";
+import type { IEditTodoFormProps,  IEditTodoFormValues } from "./types";
 import { useForm } from "react-hook-form";
 import { todoStore } from "@/entities/todo";
 import { Button, Input } from "@/shared/ui";
@@ -7,18 +7,18 @@ import styles from "./RenameTodoForm.module.scss";
 import { useEffect } from "react";
 import { FaCheck, FaX  } from "react-icons/fa6";
 
-export const RenameTodoForm = observer(function RenameTodoForm({ 
+export const EditTodoForm = observer(function EditTodoForm({ 
   todoId, 
   currentTitle,
   onClose,
-}: IRenameTodoFormProps) {
+}: IEditTodoFormProps) {
   const {
     register,
     handleSubmit,
     reset,
     clearErrors,
     formState: { errors },
-  } = useForm<IRenameTodoFormValues>({
+  } = useForm<IEditTodoFormValues>({
     defaultValues: {
       title: currentTitle,
     },
@@ -30,7 +30,7 @@ export const RenameTodoForm = observer(function RenameTodoForm({
     reset({ title: currentTitle });
   }, [currentTitle, reset]);
 
-  const onSubmit = async ({ title }: IRenameTodoFormValues) => {
+  const onSubmit = async ({ title }: IEditTodoFormValues) => {
     await todoStore.renameTodo(todoId, title); 
     reset({ title: title });
     onClose?.();
@@ -51,7 +51,7 @@ export const RenameTodoForm = observer(function RenameTodoForm({
 
   return (
     <>
-      <form className={styles['rename-todo-form']} onSubmit={handleSubmit(onSubmit)}>
+      <form className={styles['edit-todo-form']} onSubmit={handleSubmit(onSubmit)}>
         <Input
           placeholder='Введите новое название'
           error={errors.title?.message}
@@ -71,11 +71,11 @@ export const RenameTodoForm = observer(function RenameTodoForm({
             },
           })}
         />
-        <div className={styles['rename-todo-form__actions']}>
-          <Button htmlType='submit' variant='primary' className={styles['rename-todo-form__button']}>
+        <div className={styles['edit-todo-form__actions']}>
+          <Button htmlType='submit' variant='primary' className={styles['edit-todo-form__button']}>
               <FaCheck />
           </Button>
-          <Button onClick={handleCancel} className={styles['rename-todo-form__button']}>
+          <Button onClick={handleCancel} className={styles['edit-todo-form__button']}>
             <FaX />
           </Button>
         </div>

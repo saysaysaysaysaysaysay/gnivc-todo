@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import styles from './TodoItem.module.scss';
 import { formatTodoDate, formatTodoDateFull } from '@/shared/utils';
 import { observer } from 'mobx-react';
-import { RenameTodoForm } from '@/features/rename-todo';
+import { EditTodoForm } from '@/features/edit-todo';
 import { Button } from '@/shared/ui';
 import { FaPen } from "react-icons/fa";
 
@@ -29,7 +29,7 @@ export const TodoItem = observer(function TodoItem({
     >
       <div className={styles['todo-item__content']}>
         {isEditing ? (
-          <RenameTodoForm
+          <EditTodoForm
             todoId={id}
             currentTitle={title}
             onClose={onToggleEdit}
