@@ -11,8 +11,6 @@ export const ToggleTodo = observer(function ToggleTodo({ todoId, completed }: IT
 
   return (
     <Button
-      htmlType='button'
-      variant='default'
       className={styles['toggle-todo-button']}
       onClick={() => void handleToggle()}
     >

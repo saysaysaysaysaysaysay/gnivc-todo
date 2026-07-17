@@ -8,7 +8,7 @@ export const ToggleTheme = observer(function ToggleTheme() {
   const { theme, toggleTheme } = useTheme()
 
   return (
-    <Button onClick={toggleTheme} variant='default' className={styles['toggle-theme-button']}>
+    <Button onClick={toggleTheme} className={styles['toggle-theme-button']}>
       {theme === 'dark' ? <IoMdSunny /> : <IoMdMoon />}
     </Button>
   )
