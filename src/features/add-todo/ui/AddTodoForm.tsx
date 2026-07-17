@@ -10,17 +10,25 @@ export const AddTodoForm = observer(function AddTodoForm() {
     register,
     handleSubmit,
     reset,
+    clearErrors,
     formState: { errors },
   } = useForm<IAddTodoFormValues>({
     defaultValues: {
       title: '',
     },
     mode: 'onSubmit',
+    reValidateMode: 'onSubmit',
   });
 
   const onSubmit = async ({ title }: IAddTodoFormValues) => {
     await todoStore.addTodo(title);
     reset({ title: '' });
+  };
+  const handleTitleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (errors.title) {
+      clearErrors('title');
+    }
+    return event.target.value;
   };
 
   return (
@@ -29,17 +37,20 @@ export const AddTodoForm = observer(function AddTodoForm() {
         placeholder='Что планируете добавить?'
         label='Название задачи'
         error={errors.title?.message}
-        {...register('title', {
-          required: 'Введите название задачи',
-          validate: (value) => {
-            const trimmed = value.trim();
-            if (!trimmed) return 'Название не может быть пустым';
-            if (trimmed.length > 100) {
-              return 'Название должно быть не длиннее 100 символов';
-            }
-            return true;
-          },
-        })}
+         {...register('title', {
+            onChange: (event) => {
+              handleTitleInput(event);
+            },
+            required: 'Введите название задачи',
+            validate: (value) => {
+              const trimmed = value.trim();
+                if (!trimmed) return 'Название не может быть пустым';
+                if (trimmed.length > 100) {
+                  return 'Название должно быть не длиннее 100 символов';
+                }
+              return true;
+            },
+          })}
       />
       {!errors.title && <div className={styles['empty-div']}></div>}
       <div></div>
