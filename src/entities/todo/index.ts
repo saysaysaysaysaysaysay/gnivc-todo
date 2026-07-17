@@ -1,2 +1,2 @@
-export type { Todo, IPersistedTodo } from "./model/types";
+export type { Todo } from "./model/types";
 export { todoStore } from "./model/store";
