@@ -51,6 +51,16 @@ export class TodoStore {
     });
   }
 
+  async renameTodo(id: string, title: string): Promise<void> {
+    const updatedTodo = await todoApi.update(id, { title });
+
+    runInAction(() => {
+      this.todos = this.todos.map((todo) =>
+        todo.id === id ? updatedTodo : todo,
+      );
+    });
+  }
+
   async deleteTodo(id: string): Promise<void> {
     await todoApi.delete(id);
 

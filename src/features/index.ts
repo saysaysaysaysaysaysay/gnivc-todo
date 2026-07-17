@@ -4,3 +4,4 @@ export { DeleteTodo } from "./delete-todo";
 export { ToggleTodo } from "./toggle-todo";
 export { TodoItem } from "./todo-item";
 export { ToggleTheme } from "./toggle-theme";
+export { RenameTodoForm } from "./rename-todo";
