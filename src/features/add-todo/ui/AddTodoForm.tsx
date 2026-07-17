@@ -41,6 +41,8 @@ export const AddTodoForm = observer(function AddTodoForm() {
           },
         })}
       />
+      {!errors.title && <div className={styles['empty-div']}></div>}
+      <div></div>
       <Button htmlType='submit' variant='primary'>
         {'Добавить'}
       </Button>
