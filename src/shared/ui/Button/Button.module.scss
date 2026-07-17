@@ -17,7 +17,6 @@
   transition: all 0.3s linear;
   background: var(--bg);
   color: var(--text-button);
-  box-shadow: var(--shadow);
 
   &:hover {
     opacity: 0.85;
@@ -47,7 +46,6 @@
   &.delete {
     background: var(--accent-bg);
     border-color: var(--accent-border);
-    padding: 0.25rem 0.75rem;
     font-size: 0.875rem;
     width: auto;
     height: auto;
