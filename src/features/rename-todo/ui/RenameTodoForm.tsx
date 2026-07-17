@@ -16,12 +16,14 @@ export const RenameTodoForm = observer(function RenameTodoForm({
     register,
     handleSubmit,
     reset,
+    clearErrors,
     formState: { errors },
   } = useForm<IRenameTodoFormValues>({
     defaultValues: {
       title: currentTitle,
     },
-    mode: 'onChange',
+    mode: 'onSubmit',
+    reValidateMode: 'onSubmit',
   });
 
   useEffect(() => {
@@ -40,6 +42,13 @@ export const RenameTodoForm = observer(function RenameTodoForm({
     onClose?.();
   };
 
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (errors.title) {
+      clearErrors('title');
+    }
+    return event.target.value;
+  };
+
   return (
     <>
       <form className={styles['rename-todo-form']} onSubmit={handleSubmit(onSubmit)}>
@@ -47,7 +56,10 @@ export const RenameTodoForm = observer(function RenameTodoForm({
           placeholder='Введите новое название'
           error={errors.title?.message}
           autoFocus
-           {...register('title', {
+          {...register('title', {
+            onChange: (event) => {
+              handleTitleChange(event);
+            },
             required: 'Введите название задачи',
             validate: (value) => {
               const trimmed = value.trim();
