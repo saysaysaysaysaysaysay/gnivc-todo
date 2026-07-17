@@ -3,8 +3,12 @@
   min-width: 40px;
   height: 40px;
   min-height: 40px;
-  padding: 0;
+  padding: 2.33px 0 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  svg {
+    color: var(--icon-color);
+    fill: var(--icon-color);
+  }
 }
