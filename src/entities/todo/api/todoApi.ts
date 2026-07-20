@@ -16,6 +16,7 @@ function createUTCDate(): Date {
 
 export const todoApi: ITodoApi = {
   async getAll(): Promise<Todo[]> {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     return readTodosFromStorage();
   },
 
@@ -27,8 +28,8 @@ export const todoApi: ITodoApi = {
       createdAt: createUTCDate(),
     };
 
-    const todos = await readTodosFromStorage();
-    await writeTodosToStorage([todo, ...todos]);
+    const todos = readTodosFromStorage();
+    writeTodosToStorage([todo, ...todos]);
 
     return todo;
   },
@@ -37,7 +38,7 @@ export const todoApi: ITodoApi = {
     id: string,
     data: Partial<Pick<Todo, "title" | "completed">>,
   ): Promise<Todo> {
-    const todos = await readTodosFromStorage();
+    const todos = readTodosFromStorage();
     const target = todos.find((todo) => todo.id === id);
     if (!target) {
       throw new Error("Todo не найден");
@@ -48,7 +49,7 @@ export const todoApi: ITodoApi = {
       ...data,
     };
 
-    await writeTodosToStorage(
+    writeTodosToStorage(
       todos.map((todo) => (todo.id === id ? updatedTodo : todo)),
     );
 
@@ -56,7 +57,7 @@ export const todoApi: ITodoApi = {
   },
 
   async delete(id: string): Promise<void> {
-    const todos = await readTodosFromStorage();
-    await writeTodosToStorage(todos.filter((todo) => todo.id !== id));
+    const todos = readTodosFromStorage();
+    writeTodosToStorage(todos.filter((todo) => todo.id !== id));
   },
 };

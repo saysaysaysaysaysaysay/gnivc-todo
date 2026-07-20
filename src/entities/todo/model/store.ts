@@ -8,11 +8,15 @@ export class TodoStore {
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
-    this.loadTodos();
   }
 
   async loadTodos(): Promise<void> {
-    this.isLoading = true;
+    if (this.isLoading || this.todos.length > 0) return;
+
+    runInAction(() => {
+      this.isLoading = true;
+    });
+
     try {
       const todos = await todoApi.getAll();
       runInAction(() => {
@@ -52,6 +56,12 @@ export class TodoStore {
   }
 
   async renameTodo(id: string, title: string): Promise<void> {
+    const currentTodo = this.todos.find((todo) => todo.id === id);
+
+    if (!currentTodo || currentTodo.title === title) {
+      return;
+    }
+
     const updatedTodo = await todoApi.update(id, { title });
 
     runInAction(() => {
@@ -70,4 +80,29 @@ export class TodoStore {
   }
 }
 
-export const todoStore = new TodoStore();
+const createStore = () => new TodoStore();
+
+let todoStore =
+  (import.meta.hot?.data?.todoStore as TodoStore | undefined) ?? createStore();
+
+if (import.meta.hot) {
+  import.meta.hot.accept();
+  import.meta.hot.dispose((data) => {
+    data.todoStore = todoStore;
+  });
+
+  import.meta.hot.accept((newModule) => {
+    const nextStore = newModule?.todoStore ?? createStore();
+
+    if (nextStore && nextStore !== todoStore) {
+      runInAction(() => {
+        nextStore.todos = todoStore.todos;
+        nextStore.isLoading = todoStore.isLoading;
+      });
+
+      todoStore = nextStore;
+    }
+  });
+}
+
+export { todoStore };

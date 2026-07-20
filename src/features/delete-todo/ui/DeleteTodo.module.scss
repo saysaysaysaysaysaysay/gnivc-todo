@@ -1,12 +1,15 @@
 .delete-todo-button {
-  width: 40px;
   min-width: 40px;
-  height: 40px;
+  width: 40px;
   min-height: 40px;
+  height: 40px;
   padding: 2.33px 0 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  flex-grow: 0;
+  
   svg {
     color: var(--icon-color);
     fill: var(--icon-color);

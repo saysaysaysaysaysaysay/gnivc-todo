@@ -1,33 +1,25 @@
+import { todoStore,  } from '@/entities/todo/model/store';
 import styles from './TodoList.module.scss';
-import type { ITodoListProps } from './types';
 import { TodoItem } from '@/features/todo-item';
-import { useState } from 'react';
+import {  useEffect } from 'react';
+import { observer } from 'mobx-react';
+import { Spinner }  from '@/shared/ui/Spinner';
 
 
-export function TodoList({ todos }: ITodoListProps) {
-  const [editingTodoId, setEditingTodoId] = useState<string | null>(null);
+export const TodoList = observer(function TodoList() {
+  useEffect(() => {
+   todoStore.loadTodos()
+  }, [])
 
-  const activeTodoExists = todos.find((todo) => todo.id === editingTodoId);
+  const { todos, isLoading } = todoStore;
 
-  if (!activeTodoExists && editingTodoId) {
-    setEditingTodoId(null);
+   if (isLoading) {
+    return (
+      <div className={styles['todo-list__loading']}>
+        <Spinner />
+      </div>
+    );
   }
-
-  const handleToggleEdit = (todoId: string) => {
-    if (editingTodoId === todoId) {
-      setEditingTodoId(null);
-      return;
-    }
-
-    if (editingTodoId && editingTodoId !== todoId) {
-      const shouldCancel = window.confirm('Вы уверены, что хотите отменить редактирование текущей задачи?');
-      if (!shouldCancel) {
-        return;
-      }
-    }
-
-    setEditingTodoId(todoId);
-  };
 
   if (todos.length === 0) {
     return <p className={styles['todo-list__empty']}>Пока нет задач</p>;
@@ -39,11 +31,9 @@ export function TodoList({ todos }: ITodoListProps) {
         <li key={todo.id} className={styles['todo-list__item']}>
           <TodoItem
             todo={todo}
-            isEditing={editingTodoId === todo.id}
-            onToggleEdit={() => handleToggleEdit(todo.id)}
           />
         </li>
       ))}
     </ul>
   );
-}
+})

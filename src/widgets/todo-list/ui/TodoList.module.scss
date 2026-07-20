@@ -7,10 +7,20 @@
   gap: 10px;
 }
 
-
 .todo-list__empty {
   margin: 0;
   padding: 20px 0;
   color: var(--text);
   text-align: center;
+}
+
+.todo-list__loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 140px;
+  padding-top: 18px;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
 }

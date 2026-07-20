@@ -2,7 +2,7 @@ import type { Todo } from "@/entities/todo";
 
 export const TODO_STORAGE_KEY = "gnivc-todo-items";
 
-export async function readTodosFromStorage(): Promise<Todo[]> {
+export function readTodosFromStorage(): Todo[] {
   try {
     const raw = localStorage.getItem(TODO_STORAGE_KEY);
     if (!raw) return [];
@@ -19,7 +19,7 @@ export async function readTodosFromStorage(): Promise<Todo[]> {
   }
 }
 
-export async function writeTodosToStorage(todos: Todo[]): Promise<void> {
+export function writeTodosToStorage(todos: Todo[]): void {
   const data = todos.map((todo) => ({
     ...todo,
     createdAt:

@@ -8,15 +8,17 @@ import { observer } from 'mobx-react';
 import { EditTodoForm } from '@/features/edit-todo';
 import { Button } from '@/shared/ui';
 import { FaPen } from "react-icons/fa";
+import { useState } from 'react';
 
 export const TodoItem = observer(function TodoItem({
   todo,
   className,
-  isEditing = false,
-  onToggleEdit,
 }: ITodoItemProps) {
   const { id, title, completed, createdAt } = todo;
-
+  const [isEditing, setIsEditing] = useState(false);
+  const handleEditTodo = () => {
+    setIsEditing((prev) => !prev);
+  }
   return (
     <div
       className={clsx(
@@ -32,14 +34,14 @@ export const TodoItem = observer(function TodoItem({
           <EditTodoForm
             todoId={id}
             currentTitle={title}
-            onClose={onToggleEdit}
+            onClose={handleEditTodo}
           />
         ) : (
           <div className={styles['todo-item__header']}>
             <h2 className={styles['todo-item__title']} title={title}>
               {title}
             </h2>
-            <Button onClick={onToggleEdit} className={styles['todo-item__edit-button']}>
+            <Button onClick={handleEditTodo} className={styles['todo-item__edit-button']}>
               <FaPen />
             </Button>
           </div>

@@ -3,7 +3,7 @@ import type { IEditTodoFormProps,  IEditTodoFormValues } from "./types";
 import { useForm } from "react-hook-form";
 import { todoStore } from "@/entities/todo";
 import { Button, Input } from "@/shared/ui";
-import styles from "./RenameTodoForm.module.scss";
+import styles from "./EditTodoForm.module.scss";
 import { useEffect } from "react";
 import { FaCheck, FaX  } from "react-icons/fa6";
 
@@ -72,7 +72,7 @@ export const EditTodoForm = observer(function EditTodoForm({
           })}
         />
         <div className={styles['edit-todo-form__actions']}>
-          <Button htmlType='submit' variant='primary' className={styles['edit-todo-form__button']}>
+          <Button htmlType="submit" variant='primary' className={styles['edit-todo-form__button']}>
               <FaCheck />
           </Button>
           <Button onClick={handleCancel} className={styles['edit-todo-form__button']}>
