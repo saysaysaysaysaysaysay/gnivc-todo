@@ -1,0 +1,14 @@
+.edit-todo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.edit-todo-form__actions {
+  display: flex;
+  gap: 10px;
+}
+.edit-todo-form__button{
+    padding: 10px 0;
+}

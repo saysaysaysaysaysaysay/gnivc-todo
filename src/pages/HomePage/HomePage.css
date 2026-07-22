@@ -5,6 +5,12 @@
     padding: 32px 20px;
   }
 }
+.home-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
 
 .home-page__empty {
   color: var(--text);

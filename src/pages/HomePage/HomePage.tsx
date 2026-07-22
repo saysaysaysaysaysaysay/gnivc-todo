@@ -1,22 +1,21 @@
-import type { Todo } from '@/entities/todo'
+
 import './HomePage.css'
+import { AddTodoForm, ToggleTheme } from '@/features'
+import { TodoList } from '@/widgets'
+import { observer } from 'mobx-react'
 
-const todos: Todo[] = []
 
-export function HomePage() {
+export const HomePage = observer( function HomePage() {
+  
   return (
-    <main className="home-page">
-      <h1>Todo</h1>
-
-      {todos.length === 0 ? (
-        <p className="home-page__empty">Пока нет задач</p>
-      ) : (
-        <ul className="home-page__list">
-          {todos.map((todo) => (
-            <li key={todo.id}>{todo.title}</li>
-          ))}
-        </ul>
-      )}
+    <main className='home-page'>
+      <div className='home-page-header'>
+        <h1>Todo</h1>
+        <ToggleTheme />
+      </div>
+      <AddTodoForm></AddTodoForm>
+      <TodoList></TodoList>
+      
     </main>
   )
-}
+})
