@@ -3,16 +3,16 @@ import { Button } from '@/shared/ui';
 import styles from './DeleteTodo.module.scss';
 import type { IDeleteTodoProps } from './types';
 import { FaTrash } from 'react-icons/fa6';
-import { todoStore } from '@/entities/todo';
 import { observer } from 'mobx-react';
-import { ConfirmationPopup } from '@/features/pop-up';
+import { Popup } from '@/shared/ui';
+import { useDeleteTodo } from '@/entities/todo/hooks/useDeleteTodo';
 
 export const DeleteTodo = observer(function DeleteTodo({ todoId }: IDeleteTodoProps) {
+  const { deleteTodo } = useDeleteTodo();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleDelete = async () => {
-    await todoStore.deleteTodo(todoId);
-    setIsPopupOpen(!isPopupOpen);
+    await deleteTodo(todoId);
   };
 
   const handleClick = () => { 
@@ -28,10 +28,13 @@ export const DeleteTodo = observer(function DeleteTodo({ todoId }: IDeleteTodoPr
         onClick={handleClick}
       />
 
-      <ConfirmationPopup
+      <Popup
         isOpen={isPopupOpen}
         title='Удалить задачу?'
         message='Это действие нельзя будет отменить.'
+        confirmMessage = {<><FaTrash /> Подтвердить</>}
+        cancelMessage = 'Оставить'
+        backdropClick = {false}
         onConfirm={() => void handleDelete()}
         onCancel={handleClick}
       />
