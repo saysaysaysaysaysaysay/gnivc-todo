@@ -37,14 +37,9 @@ export const TodoItem = observer(function TodoItem({
             onClose={handleEditTodo}
           />
         ) : (
-          <div className={styles['todo-item__header']}>
-            <h2 className={styles['todo-item__title']} title={title}>
-              {title}
-            </h2>
-            <Button onClick={handleEditTodo} className={styles['todo-item__edit-button']}>
-              <FaPen />
-            </Button>
-          </div>
+          <h2 className={styles['todo-item__title']} title={title}>
+            {title}
+          </h2>
         )}
 
         <div className={styles['todo-item__meta']}>
@@ -57,7 +52,12 @@ export const TodoItem = observer(function TodoItem({
         </div>
       </div>
       <div className={styles['todo-item__actions']}>
-        <DeleteTodo todoId={id} />
+        <div className={styles['todo-item__actions-row']}>
+          <Button onClick={handleEditTodo} className={styles['todo-item__edit-button']}>
+            <FaPen />
+          </Button>
+          <DeleteTodo todoId={id} />
+        </div>
         <ToggleTodo todoId={id} completed={completed} />
       </div>
     </div>
