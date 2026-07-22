@@ -1,17 +1,19 @@
 import { observer } from "mobx-react";
 import type { IEditTodoFormProps,  IEditTodoFormValues } from "./types";
 import { useForm } from "react-hook-form";
-import { todoStore } from "@/entities/todo";
 import { Button, Input } from "@/shared/ui";
 import styles from "./EditTodoForm.module.scss";
 import { useEffect } from "react";
 import { FaCheck, FaX  } from "react-icons/fa6";
+import { useEditTodo } from "@/entities/todo/hooks/useEditTodo";
 
 export const EditTodoForm = observer(function EditTodoForm({ 
   todoId, 
   currentTitle,
   onClose,
 }: IEditTodoFormProps) {
+  const { editTodo } = useEditTodo();
+
   const {
     register,
     handleSubmit,
@@ -31,7 +33,7 @@ export const EditTodoForm = observer(function EditTodoForm({
   }, [currentTitle, reset]);
 
   const onSubmit = async ({ title }: IEditTodoFormValues) => {
-    await todoStore.renameTodo(todoId, title); 
+    await editTodo(todoId, title);
     reset({ title: title });
     onClose?.();
   };

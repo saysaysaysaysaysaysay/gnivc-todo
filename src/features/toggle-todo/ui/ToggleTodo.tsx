@@ -1,12 +1,15 @@
 import { Button } from '@/shared/ui';
 import styles from './ToggleTodo.module.scss';
 import type { IToggleTodoButtonProps } from './types';
-import { todoStore } from '@/entities/todo';
 import { observer } from 'mobx-react';
+import { useToggleTodo } from '@/entities/todo/hooks/useToggleTodo';
 
 export const ToggleTodo = observer(function ToggleTodo({ todoId, completed }: IToggleTodoButtonProps) {
+
+  const { toggleTodo } = useToggleTodo();
+
   const handleToggle = async () => {
-    await todoStore.toggleTodo(todoId);
+    await toggleTodo(todoId);
   };
 
   return (
