@@ -11,6 +11,7 @@ export const EditTodoForm = observer(function EditTodoForm({
   todoId, 
   currentTitle,
   onClose,
+  
 }: IEditTodoFormProps) {
   const { editTodo } = useEditTodo();
 
@@ -19,6 +20,7 @@ export const EditTodoForm = observer(function EditTodoForm({
     handleSubmit,
     reset,
     clearErrors,
+    setValue,
     formState: { errors },
   } = useForm<IEditTodoFormValues>({
     defaultValues: {
@@ -50,6 +52,7 @@ export const EditTodoForm = observer(function EditTodoForm({
     }
     return event.target.value;
   };
+  
 
   return (
     <>
@@ -58,10 +61,12 @@ export const EditTodoForm = observer(function EditTodoForm({
           placeholder='Введите новое название'
           error={errors.title?.message}
           autoFocus
+          onClear = {() => setValue('title', '')}
           {...register('title', {
             onChange: (event) => {
               handleTitleChange(event);
             },
+            
             required: 'Введите название задачи',
             validate: (value) => {
               const trimmed = value.trim();

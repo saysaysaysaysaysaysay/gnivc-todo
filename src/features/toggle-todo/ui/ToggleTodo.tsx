@@ -2,7 +2,7 @@ import { Button } from '@/shared/ui';
 import styles from './ToggleTodo.module.scss';
 import type { IToggleTodoButtonProps } from './types';
 import { observer } from 'mobx-react';
-import { useToggleTodo } from '@/entities/todo/hooks/useToggleTodo';
+import { useToggleTodo } from '@/entities/todo';
 
 export const ToggleTodo = observer(function ToggleTodo({ todoId, completed }: IToggleTodoButtonProps) {
 

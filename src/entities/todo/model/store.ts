@@ -5,6 +5,7 @@ import { todoApi } from "@/entities/todo/api";
 export class TodoStore {
   todos: Todo[] = [];
   isLoading = false;
+  editingTodoId: string | null = null;
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
@@ -76,6 +77,12 @@ export class TodoStore {
 
     runInAction(() => {
       this.todos = this.todos.filter((todo) => todo.id !== id);
+    });
+  }
+
+  setEditingTodo(id: string | null): void {
+    runInAction(() => {
+      this.editingTodoId = id;
     });
   }
 }

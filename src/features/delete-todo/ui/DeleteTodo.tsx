@@ -5,7 +5,7 @@ import type { IDeleteTodoProps } from './types';
 import { FaTrash } from 'react-icons/fa6';
 import { observer } from 'mobx-react';
 import { Popup } from '@/shared/ui';
-import { useDeleteTodo } from '@/entities/todo/hooks/useDeleteTodo';
+import { useDeleteTodo } from '@/entities/todo';
 
 export const DeleteTodo = observer(function DeleteTodo({ todoId }: IDeleteTodoProps) {
   const { deleteTodo } = useDeleteTodo();
