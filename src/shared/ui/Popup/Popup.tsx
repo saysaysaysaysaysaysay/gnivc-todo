@@ -1,20 +1,41 @@
 import { Button } from '@/shared/ui';
 import styles from './Popup.module.scss';
-import type { ConfirmationPopupProps } from './types';
+import type { PopupProps } from './types';
+import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
-export function ConfirmationPopup({
+
+export function Popup({
   isOpen,
   title,
   message,
   onCancel,
   onConfirm,
-}: ConfirmationPopupProps) {
+  cancelMessage = "Отменить",
+  confirmMessage = "Подтвердить",
+  backdropClick = true,
+}: PopupProps) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   if (!isOpen) {
     return null;
   }
 
-  return (
-    <div className={styles.overlay} role='presentation' onClick={onCancel}>
+  const handleOverlayClick = () => {
+     if (backdropClick) { 
+      onCancel();
+     }
+  }
+
+  return createPortal(
+    <div className={styles.overlay} role='presentation' onClick={handleOverlayClick}>
       <div
         className={styles.dialog}
         role='dialog'
@@ -28,13 +49,14 @@ export function ConfirmationPopup({
         <p className={styles.message}>{message}</p>
         <div className={styles.actions}>
           <Button variant='default' className={styles.cancelButton} onClick={onCancel}>
-            Отмена
+            {cancelMessage}
           </Button>
           <Button variant='delete' className={styles.confirmButton} onClick={onConfirm}>
-            Подтвердить
+            {confirmMessage}
           </Button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body 
   );
 }
