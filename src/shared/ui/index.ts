@@ -1,2 +1,6 @@
-// Публичный API UI-kit. Компоненты экспортируются отсюда:
-// export { Button } from './Button'
+export { Button } from "./Button"
+export { Checkbox } from "./Checkbox"
+export { Input } from "./Input"
+export { Popover, PopoverContext } from "./Popover"
+export { Select } from "./Select"
+export { Tooltip } from "./Tooltip"

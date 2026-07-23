@@ -1,0 +1,11 @@
+.small {
+  transform: scale(1);
+}
+
+.medium {
+  transform: scale(1.5);
+}
+
+.big {
+  transform: scale(2);
+}

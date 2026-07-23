@@ -1,22 +1,25 @@
-import type { Todo } from '@/entities/todo'
-import './HomePage.css'
-
-const todos: Todo[] = []
+import { PopoverContext } from "@/shared/ui"
+import { TodoAdd, TodoHeader, TodoList, TodoPagination } from "@/widget"
+import { useState } from "react"
+import "./HomePage.css"
 
 export function HomePage() {
+  const [idPopoverVisible, setIdPopoverVisible] = useState("")
+
   return (
     <main className="home-page">
-      <h1>Todo</h1>
+      <TodoHeader />
+      <PopoverContext.Provider
+        value={{ idPopoverVisible, setIdPopoverVisible }}
+      >
+        <div className="home-page-content">
+          <TodoAdd />
 
-      {todos.length === 0 ? (
-        <p className="home-page__empty">Пока нет задач</p>
-      ) : (
-        <ul className="home-page__list">
-          {todos.map((todo) => (
-            <li key={todo.id}>{todo.title}</li>
-          ))}
-        </ul>
-      )}
+          <TodoList />
+
+          <TodoPagination />
+        </div>
+      </PopoverContext.Provider>
     </main>
   )
 }
