@@ -1,0 +1,27 @@
+.todo-add {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 16px;
+}
+
+.todo-add-block {
+  display: flex;
+  gap: 8px;
+}
+
+.todo-add-block-form {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+}
+
+.error {
+  color: red;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+Input {
+  width: 100%;
+}

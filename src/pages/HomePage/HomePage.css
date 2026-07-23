@@ -6,13 +6,8 @@
   }
 }
 
-.home-page__empty {
-  color: var(--text);
-}
-
-.home-page__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  text-align: left;
+.home-page-content {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
 }
