@@ -68,6 +68,7 @@ class TodoStore {
       await todoService.create(data)
       runInAction(() => {
         this.isLoading = false
+        this.error = ""
         this.allCountTodo++
         this.todos.push(data)
         if (this.todos.length + 1 > this.perPage) this.getAllTodo()
@@ -99,6 +100,7 @@ class TodoStore {
         const index = this.todos.findIndex((item) => item.id === id)
         if (index != -1) this.todos[index] = updated
         this.isLoading = false
+        this.error = ""
       })
     } catch (error) {
       runInAction(() => {
@@ -163,6 +165,12 @@ class TodoStore {
       runInAction(() => {
         this.idEditTodo = title
       })
+  }
+
+  setError = (title: string) => {
+    runInAction(() => {
+      this.error = title
+    })
   }
 }
 

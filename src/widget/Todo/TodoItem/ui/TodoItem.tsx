@@ -14,6 +14,7 @@ export const TodoItem = observer(({ todo }: { todo: Todo }) => {
     idEditTodo,
     removeTodo,
     toggleCompleteTodo,
+    setError
   } = useStore()
   const [isDeleting, setIsDeleting] = useState(false)
   const [inputVal, setInputVal] = useState(todo.title)
@@ -23,6 +24,7 @@ export const TodoItem = observer(({ todo }: { todo: Todo }) => {
     newTodo.id = inputVal
     newTodo.title = inputVal
     updateTodo(todo.id, newTodo)
+    setInputVal(todo.title)
     setIdEditTodo(todo.title)
   }, [updateTodo, setIdEditTodo, inputVal, todo])
 
@@ -58,7 +60,10 @@ export const TodoItem = observer(({ todo }: { todo: Todo }) => {
       <TodoButtons
         todo={todo}
         idEditTodo={idEditTodo}
-        setIdEditTodo={() => setIdEditTodo(todo.title)}
+        setIdEditTodo={() => {
+          setIdEditTodo(todo.title)
+          setError("")
+        }}
         handleEditTodo={handleEditTodo}
         handleDeleteTodo={handleDeleteTodo}
       />

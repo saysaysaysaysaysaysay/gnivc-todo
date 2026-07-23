@@ -50,7 +50,7 @@ export const TodoAdd = observer(() => {
           {isSorted ? <ArrowDownWideNarrow /> : <ArrowUpNarrowWide />}
         </Button>
       </div>
-      {errors.title?.message && (
+      {error && error.length > 0 && (
         <p className="error">{errors.title?.message}</p>
       )}
     </div>
